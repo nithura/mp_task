@@ -1,0 +1,6 @@
+---
+- name: docker ce on jenkins
+  hosts: localhost
+  become: yes
+  roles:
+    - role: docker
