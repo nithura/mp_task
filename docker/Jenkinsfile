@@ -9,23 +9,27 @@ pipeline {
     stages{
          stage('download_modules'){
              steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/master']],
-                    doGenerateSubmoduleConfigurations: false,
-                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'mp_task']],
-                    submoduleCfg: [],
-                    userRemoteConfigs: [[
-                        credentialsId: '',
-                        url: 'https://github.com/nithura/mp_task.git'
+                dir ('modules') {
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/master']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'mp_task']],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                            credentialsId: '',
+                            url: 'https://github.com/nithura/mp_task.git'
                         ]]
                     ])
+                }
             }
         }
     stage('Building image') {
       steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+        dir ('modules/mp_task/docker') {
+            script {
+                dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+           }
         }
       }
     }
