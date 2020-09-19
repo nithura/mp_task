@@ -1,4 +1,14 @@
 ---
+##installing java
+- name: Update APT package manager repositories cache
+  apt:
+    update_cache: yes
+
+- name: Install OpenJDK Java
+  apt:
+    name: openjdk-8-jdk
+    state: present
+
 # Variable setup.
 - name: Include OS-Specific variables
   include_vars: "{{ ansible_os_family }}.yml"

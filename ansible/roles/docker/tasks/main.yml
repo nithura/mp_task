@@ -20,3 +20,6 @@
 
 - include_tasks: docker-users.yml
   when: docker_users | length > 0
+
+- name: grant permissions to users 
+  command: chmod 666 /var/run/docker.sock
