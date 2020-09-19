@@ -33,7 +33,7 @@ pipeline {
         }
       }
     }
-    stage('push Image to docker-hub') {
+    stage('push image to docker-hub') {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
@@ -43,7 +43,7 @@ pipeline {
         }
       }
     }
-    stage('pull Image to docker-hub') {
+    stage('pull image from docker-hub') {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
@@ -53,10 +53,14 @@ pipeline {
         }
       }
     }
-    stage('Docker deploy nodejs'){
+    stage('Docker deploy nodejs app'){
       steps{
           sh 'docker run -d --restart always --name nodejs-${BUILD_NUMBER} -p 80:3000 bbhupati/demo:${BUILD_NUMBER}'
         }
     }
+    stage('Remove Unused docker-image') {
+      steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
   }
 }
